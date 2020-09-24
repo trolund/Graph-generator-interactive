@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Sketch from "react-p5";
-import styled from "styled-components";
 import p5Types from "p5"; //Import this for typechecking and intellisense
 import { Point } from "../Models/Point";
 import { PointConfig } from "../Types/PointConfig";
@@ -17,18 +16,22 @@ const P5: React.FC<ComponentProps> = (props: ComponentProps) => {
   const [smoothAnimation, setSmoothAnimation] = useState(true);
   const [clusterNumbers, setClusterNumbers] = useState(15);
   const [maxSpeed, setMaxSpeed] = useState(3);
+  const [minSpeed, setMinSpeed] = useState(0);
+  const [sizeMax, setSizeMax] = useState(20);
+  const [sizeMin, setSizeMin] = useState(10);
+  const [margin, setMargin] = useState(100);
 
   //let clusterSize = 5;
   // let clusterNumbers = 1;
   let connections = 2;
-  let margin = 100;
+  // let margin = 100;
   let canvasWidth = 800;
   let canvasHeight = 500;
   //let smoothAnimation = true;
   // let maxSpeed = 3;
-  let minSpeed = 0;
-  let sizeMax = 20;
-  let sizeMin = 10;
+  //let minSpeed = 0;
+  // let sizeMax = 20;
+  // let sizeMin = 10;
   let bgColor: number = 10;
 
   const resetClickHandler = () => {
@@ -127,38 +130,6 @@ const P5: React.FC<ComponentProps> = (props: ComponentProps) => {
     }
   };
 
-  const StyledSlider = styled(ReactSlider)`
-    width: 100%;
-    height: 25px;
-  `;
-
-  const StyledThumb = styled.div`
-    height: 25px;
-    line-height: 25px;
-    width: 25px;
-    text-align: center;
-    background-color: #000;
-    color: #fff;
-    border-radius: 50%;
-    cursor: grab;
-  `;
-
-  const Thumb = (props: any, state: any) => (
-    <StyledThumb {...props}>{state.valueNow}</StyledThumb>
-  );
-
-  const StyledTrack = styled.div`
-    top: 0;
-    bottom: 0;
-    background: ${(props: any) =>
-      props.index === 2 ? "#f00" : props.index === 1 ? "#0f0" : "#ddd"};
-    border-radius: 999px;
-  `;
-
-  const Track = (props: any, state: any) => (
-    <StyledTrack {...props} index={state.index} />
-  );
-
   return (
     <>
       <button onClick={resetClickHandler}>Reset</button>
@@ -166,13 +137,46 @@ const P5: React.FC<ComponentProps> = (props: ComponentProps) => {
         Smooth animation : {smoothAnimation ? "ON" : "OFF"}
       </button>
       <div className="slidecontainer">
-        <p>Default range slider:</p>
+        <p>Max movment speed of nodes : {maxSpeed}</p>
+        <input
+          type="range"
+          min={minSpeed}
+          max="50"
+          value={maxSpeed}
+          onChange={(e) => setMaxSpeed(Number(e.target.value))}
+        />
+        <p>Min movment speed of nodes : {minSpeed}</p>
         <input
           type="range"
           min="0"
-          max="100"
-          value={maxSpeed}
-          onChange={(e) => setMaxSpeed(Number(e.target.value))}
+          max={maxSpeed}
+          value={minSpeed}
+          onChange={(e) => setMinSpeed(Number(e.target.value))}
+        />
+
+        <p>Max size : {sizeMax}</p>
+        <input
+          type="range"
+          min={sizeMin}
+          max="50"
+          value={sizeMax}
+          onChange={(e) => setSizeMax(Number(e.target.value))}
+        />
+        <p>Min size : {sizeMin}</p>
+        <input
+          type="range"
+          min="0"
+          max={sizeMax}
+          value={sizeMin}
+          onChange={(e) => setSizeMin(Number(e.target.value))}
+        />
+        <p>Margin : {margin}</p>
+        <input
+          type="range"
+          min="0"
+          max="200"
+          value={margin}
+          onChange={(e) => setMargin(Number(e.target.value))}
         />
       </div>
       <Sketch setup={setup} draw={draw} />
